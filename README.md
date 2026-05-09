@@ -133,7 +133,8 @@ for row in policy:
 # Output
 
 ```
-State Value Function:<img width="774" height="318" alt="{78B4862F-A4F5-4358-A4DD-7EAC9121725D}" src="https://github.com/user-attachments/assets/9ebae614-3bc5-499b-998d-e0d289b30f60" />
+State Value Function: <img width="608" height="313" alt="{C2CFC88F-D8A5-48F8-B6CC-0CCEF2C86E73}" src="https://github.com/user-attachments/assets/4ce5c427-002e-49f9-a714-08743b3fed16" />
+
 
 ```
 
