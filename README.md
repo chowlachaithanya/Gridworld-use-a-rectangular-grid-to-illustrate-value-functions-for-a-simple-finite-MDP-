@@ -47,19 +47,95 @@ Display the final state-value grid.
 # Program
 
 ```
+#GridWorld
+
+import numpy as np
+
+# Grid size (rectangular)
+rows, cols = 4, 5
+
+gamma = 0.9      # discount factor
+theta = 1e-4     # convergence threshold
+
+# Rewards
+rewards = np.zeros((rows, cols))
+rewards[0, 4] = 1     # Goal
+rewards[1, 4] = -1    # Bad state
+
+# Actions: Up, Down, Left, Right
+actions = [(-1,0), (1,0), (0,-1), (0,1)]
+action_symbols = ["↑", "↓", "←", "→"]
+
+# Initialize Value Function
+V = np.zeros((rows, cols))
+
+def is_valid(r, c):
+    return 0 <= r < rows and 0 <= c < cols
+
+# --- VALUE ITERATION ---
+while True:
+    delta = 0
+    new_V = np.copy(V)
+
+    for r in range(rows):
+        for c in range(cols):
+            values = []
+
+            for a in actions:
+                nr, nc = r + a[0], c + a[1]
+
+                if not is_valid(nr, nc):
+                    nr, nc = r, c   # stay in same cell
+
+                reward = rewards[nr, nc]
+                values.append(reward + gamma * V[nr, nc])
+
+            best_value = max(values)
+            new_V[r, c] = best_value
+
+            delta = max(delta, abs(V[r, c] - best_value))
+
+    V = new_V
+
+    if delta < theta:
+        break
+
+# --- PRINT VALUE FUNCTION ---
+print("\nValue Function:\n")
+for row in V:
+    print(["{0:0.2f}".format(v) for v in row])
+
+
+# --- EXTRACT POLICY ---
+policy = np.empty((rows, cols), dtype=str)
+
+for r in range(rows):
+    for c in range(cols):
+        action_values = []
+
+        for a in actions:
+            nr, nc = r + a[0], c + a[1]
+
+            if not is_valid(nr, nc):
+                nr, nc = r, c
+
+            reward = rewards[nr, nc]
+            action_values.append(reward + gamma * V[nr, nc])
+
+        best_action = np.argmax(action_values)
+        policy[r, c] = action_symbols[best_action]
+
+# --- PRINT POLICY ---
+print("\nPolicy:\n")
+for row in policy:
+    print(row)
 ```
-
----
-
 # Output
 
-```text
-State Value Function:
-
+```
+State Value Function:<img width="774" height="318" alt="{78B4862F-A4F5-4358-A4DD-7EAC9121725D}" src="https://github.com/user-attachments/assets/9ebae614-3bc5-499b-998d-e0d289b30f60" />
 
 ```
-
----
 
 # Result
 
